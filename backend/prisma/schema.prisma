@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  actors    Actor[]
+  createdAt DateTime @default(now())
+}
+
+model Actor {
+  id       String  @id @default(cuid())
+  name     String
+  age      Int?
+  gender   String
+  type     String
+  status   String
+  location String?
+  height   String?
+  hair     String?
+  eyes     String?
+  bio      String?
+  reelUrl  String?
+  slug     String  @unique
+  visible  Boolean @default(true)
+  imageUrl String? // actor profile image
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([userId])
+}
